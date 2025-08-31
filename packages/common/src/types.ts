@@ -4,8 +4,8 @@ export const RoleEnum = z.enum(['EDITOR', 'YOUTUBER'])
 export const VideoStatusEnum = z.enum(['PENDING', 'APPROVED', 'PUBLISHED', 'REJECTED'])
 
 export const UserSchema = z.object({
-  id: z.string().cuid().optional(), // cuid generated
-  email: z.string().email(),
+  id: z.cuid2().optional(), // cuid generated
+  email: z.email(),
   password: z.string().min(6), // add a minimum length for security
   role: RoleEnum,
   createdAt: z.date().optional(), // handled by DB
