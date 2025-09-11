@@ -19,11 +19,13 @@ authRouter.post('/signup', async (req,res) => {
     }
 
     try {
+
+        const hashedPassword = await bcrypt.hash(parsedData.data.password, 10);
+
         const user = await prismaClient.user.create({
             data: {
                 email: parsedData.data.email,
-                //TODO: hash the password before storing it
-                password: parsedData.data.password,
+                password: hashedPassword,
                 role: parsedData.data.role
             }
         })
@@ -50,11 +52,9 @@ authRouter.post('/signin', async (req,res) => {
         return;
     }
 
-    // TODO: compare the hashed password here
     const user = await prismaClient.user.findFirst({
         where: {
-            email: parsedData.data.email,
-            password: parsedData.data.password
+            email: parsedData.data.email
         }
     })
 
@@ -63,6 +63,14 @@ authRouter.post('/signin', async (req,res) => {
             error: "Not authorized"
         });
         return;
+    }
+
+    const isPasswordValid = await bcrypt.compare(parsedData.data.password, user.password);
+
+    if (!isPasswordValid) {
+        return res.status(403).json({
+            error: "Not authorized"
+        });
     }
     
     const token = jwt.sign({
