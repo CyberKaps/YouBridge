@@ -4,8 +4,8 @@ export const RoleEnum = z.enum(['EDITOR', 'YOUTUBER'])
 export const VideoStatusEnum = z.enum(['PENDING', 'APPROVED', 'PUBLISHED', 'REJECTED'])
 
 export const UserSchema = z.object({
-  id: z.cuid2().optional(), // cuid generated
-  email: z.email(),
+  id: z.cuid().optional(), // cuid generated
+  email: z.string(),
   password: z.string().min(6), // add a minimum length for security
   role: RoleEnum,
   createdAt: z.date().optional(), // handled by DB
@@ -13,7 +13,7 @@ export const UserSchema = z.object({
 })
 
 export const VideoSchema = z.object({
-  id: z.string().cuid().optional(), // cuid generated
+  id: z.cuid().optional(), // cuid generated
   title: z.string().min(1),
   description: z.string().optional(),
   s3Key: z.string().min(1), // should be a unique identifier for file, assumed required
@@ -21,5 +21,5 @@ export const VideoSchema = z.object({
   createdAt: z.date().optional(),
   updatedAt: z.date().optional(),
 
-  authorId: z.string().cuid(), // relation to User
+  authorId: z.cuid(), // relation to User
 })
