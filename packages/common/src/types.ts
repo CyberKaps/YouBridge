@@ -3,13 +3,19 @@ import { z } from 'zod'
 export const RoleEnum = z.enum(['EDITOR', 'YOUTUBER'])
 export const VideoStatusEnum = z.enum(['PENDING', 'APPROVED', 'PUBLISHED', 'REJECTED'])
 
-export const UserSchema = z.object({
+export const SignupSchema = z.object({
   id: z.cuid().optional(), // cuid generated
   email: z.string(),
   password: z.string().min(6), // add a minimum length for security
   role: RoleEnum,
   createdAt: z.date().optional(), // handled by DB
   updatedAt: z.date().optional(), // handled by DB
+})
+
+export const SigninSchema = z.object({
+  id: z.cuid().optional(), // cuid generated
+  email: z.string(),
+  password: z.string().min(6), // add a minimum length for security
 })
 
 export const VideoSchema = z.object({

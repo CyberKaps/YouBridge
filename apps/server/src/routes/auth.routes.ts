@@ -1,5 +1,5 @@
 import express, { Router } from 'express';
-import { UserSchema } from '@repo/common/types';
+import { SigninSchema, SignupSchema } from '@repo/common/types';
 import { prismaClient } from '@repo/db/client';
 import jwt from 'jsonwebtoken';
 import bcrypt from "bcrypt";
@@ -10,7 +10,7 @@ export const authRouter: Router = Router();
 
 authRouter.post('/signup', async (req,res) => {
     
-    const parsedData = UserSchema.safeParse(req.body);
+    const parsedData = SignupSchema.safeParse(req.body);
     if(!parsedData.success) {
         res.status(400).json({
             error: "Invalid data"
@@ -41,7 +41,7 @@ authRouter.post('/signup', async (req,res) => {
 
 authRouter.post('/signin', async (req,res) => {
 
-    const parsedData = UserSchema.safeParse(req.body);
+    const parsedData = SigninSchema.safeParse(req.body);
 
     if(!parsedData.success) {
         res.status(400).json({
