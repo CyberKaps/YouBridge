@@ -45,7 +45,12 @@ model User {
 
   // This creates a one-to-many relationship:
   // One user can have many videos.
-  videos    Video[]
+    
+
+  createdVideos  Video[]   @relation("CreatedVideos")
+
+  channelVideos  Video[]   @relation("ChannelVideos")
+
 }
 
 // Represents a video uploaded by an Editor.
@@ -63,6 +68,9 @@ model Video {
 
   // This defines the other side of the relationship:
   // A video belongs to one user.
-  youtuber      User        @relation(fields: [youtuberId], references: [id])
-  youtuberId    String      // This is the foreign key that links to the User's id.
+  author      User        @relation("CreatedVideos", fields: [authorId], references: [id])
+  authorId    String      // This is the foreign key that links to the User's id.
+
+  youtuber    User        @relation("ChannelVideos",fields: [youtuberId], references: [id])
+  youtuberId  String      
 }
