@@ -63,6 +63,6 @@ model Video {
 
   // This defines the other side of the relationship:
   // A video belongs to one user.
-  author      User        @relation(fields: [authorId], references: [id])
-  authorId    String      // This is the foreign key that links to the User's id.
+  youtuber      User        @relation(fields: [youtuberId], references: [id])
+  youtuberId    String      // This is the foreign key that links to the User's id.
 }
