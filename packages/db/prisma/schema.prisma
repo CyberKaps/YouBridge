@@ -54,7 +54,7 @@ model Video {
   title       String
   description String?     // The '?' makes this field optional.
   s3Key       String      @unique // The unique filename/key in your file storage (e.g., AWS S3).
-  filePath    String
+  filePath    String      //file path
 
   status      VideoStatus @default(PENDING) // A new video always starts as PENDING.
 
