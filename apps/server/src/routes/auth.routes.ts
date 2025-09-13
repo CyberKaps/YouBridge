@@ -4,6 +4,8 @@ import { prismaClient } from '@repo/db/client';
 import jwt from 'jsonwebtoken';
 import bcrypt from "bcrypt";
 import { OAuth2Client } from "google-auth-library";
+import dotenv from 'dotenv';
+dotenv.config();
 
 const app = express();
 
@@ -108,10 +110,12 @@ authRouter.post('/signin', async (req,res) => {
 
 // Oauth2.0 routes
 
+console.log("CLIENT_ID from .env:", process.env.GOOGLE_CLIENT_ID);
+
 const oauth2Client = new OAuth2Client({
     clientId: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    redirectUri: "http://localhost:4000/api/auth/google/callback"
+    redirectUri: "http://localhost:4000/api/v1/google/callback"
 });
 
 // Google callback

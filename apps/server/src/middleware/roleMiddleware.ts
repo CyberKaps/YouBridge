@@ -1,5 +1,7 @@
 import { Response, NextFunction } from "express";
 import { AuthRequest } from "./authMiddleware.js"; // where your AuthRequest is defined
+import dotenv from 'dotenv';
+dotenv.config();
 
 // role-based guard
 export function authorize(allowedRoles: string[]) {
