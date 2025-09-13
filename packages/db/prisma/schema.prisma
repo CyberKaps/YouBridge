@@ -33,8 +33,12 @@ enum VideoStatus {
 model User {
   id        String    @id @default(cuid())
   email     String    @unique
-  password  String
-  role      Role
+  password  String?
+  role      Role      @default(EDITOR)
+
+  googleId       String?   @unique  // only for youtubers
+  accessToken    String?  // Google OAuth access token
+  refreshToken   String?  // Google OAuth refresh token
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -50,6 +54,7 @@ model Video {
   title       String
   description String?     // The '?' makes this field optional.
   s3Key       String      @unique // The unique filename/key in your file storage (e.g., AWS S3).
+  filePath    String
 
   status      VideoStatus @default(PENDING) // A new video always starts as PENDING.
 
