@@ -1,6 +1,8 @@
+dotenv.config();
 import express from 'express'
 import { authRouter } from './routes/auth.routes.js';
 import { videoRouter } from './routes/test.routes.js';
+import dotenv from 'dotenv';
 
 const app = express()
 
