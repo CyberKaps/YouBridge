@@ -20,10 +20,10 @@ export function authMiddleware(req: AuthRequest, res: Response, next: NextFuncti
         })
     }
 
-    const token = authHeader?.split(" ")[1];
+    const token = authHeader.startsWith("Bearer ") ? authHeader.split(" ")[1] : authHeader;
 
     if(!token) {
-        res.status(401).json({
+        return res.status(401).json({
             error: "Token missing"
         })
     }
