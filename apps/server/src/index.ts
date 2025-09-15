@@ -1,7 +1,7 @@
 
 import express from 'express'
 import { authRouter } from './routes/auth.routes.js';
-import { videoRouter } from './routes/test.routes.js';
+import { videoRouter } from './routes/video.routes.js';
 import dotenv from 'dotenv';
 dotenv.config();
 
