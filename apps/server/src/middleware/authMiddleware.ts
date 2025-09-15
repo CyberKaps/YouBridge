@@ -1,39 +1,49 @@
 
 
 import { Request, Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken'
+import jwt, {JwtPayload} from 'jsonwebtoken'
+import dotenv from 'dotenv';
+dotenv.config();
+
+export interface AuthRequest extends Request {
+  user?: { userId: string; role: string };
+}
 
 
-export function middleware(req:Request, res:Response, next:NextFunction) {
+export function authMiddleware(req: AuthRequest, res: Response, next: NextFunction) {
 
-    const token = req.headers['authorization'];
+    const authHeader = req.headers['authorization'];
 
-    // if(!authHeader) {
-    //     res.status(401).json({
-    //         error: "Authorization header missing"
-    //     })
-    // }
+    if(!authHeader) {
+        return res.status(401).json({
+            error: "Authorization header missing"
+        })
+    }
 
-    // const token = authHeader?.split(" ")[1];
+    const token = authHeader?.split(" ")[1];
 
-    // if(!token) {
-    //     res.status(401).json({
-    //         error: "Token missing"
-    //     })
-    // }
+    if(!token) {
+        res.status(401).json({
+            error: "Token missing"
+        })
+    }
 
 
     try {
         
-        const decoded = jwt.verify(token as string, "kalpesh");
+        const decoded = jwt.verify(token as string, process.env.JWT_SECRET as string) as JwtPayload;
 
-        //@ts-ignore
-        req.userId = decoded.userId;
-        next();
+        req.user = {
+            userId: decoded.userId,
+            role: decoded.role
+        }
 
-    } catch {
-        res.status(401).json({
-            error: "Unauthorized"
+        return next();
+
+    } catch (err) {
+        console.error("JWT verification failed:", err);
+        return res.status(401).json({
+            error: "Unauthorized or token expired"
         })
     }
 }
