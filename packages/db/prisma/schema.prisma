@@ -33,15 +33,24 @@ enum VideoStatus {
 model User {
   id        String    @id @default(cuid())
   email     String    @unique
-  password  String
-  role      Role
+  password  String?
+  role      Role      @default(EDITOR)
+
+  googleId       String?   @unique  // only for youtubers
+  accessToken    String?  // Google OAuth access token
+  refreshToken   String?  // Google OAuth refresh token
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 
   // This creates a one-to-many relationship:
   // One user can have many videos.
-  videos    Video[]
+    
+
+  createdVideos  Video[]   @relation("CreatedVideos")
+
+  channelVideos  Video[]   @relation("ChannelVideos")
+
 }
 
 // Represents a video uploaded by an Editor.
@@ -50,6 +59,7 @@ model Video {
   title       String
   description String?     // The '?' makes this field optional.
   s3Key       String      @unique // The unique filename/key in your file storage (e.g., AWS S3).
+  filePath    String      //file path
 
   status      VideoStatus @default(PENDING) // A new video always starts as PENDING.
 
@@ -58,6 +68,9 @@ model Video {
 
   // This defines the other side of the relationship:
   // A video belongs to one user.
-  author      User        @relation(fields: [authorId], references: [id])
+  author      User        @relation("CreatedVideos", fields: [authorId], references: [id])
   authorId    String      // This is the foreign key that links to the User's id.
+
+  youtuber    User        @relation("ChannelVideos",fields: [youtuberId], references: [id])
+  youtuberId  String      
 }
