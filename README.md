@@ -1,136 +1,74 @@
-# Turborepo starter
+# 🎬 Editor–YouTuber Collaboration Platform  
 
-This Turborepo starter is maintained by the Turborepo core team.
+This project is a role-based platform designed to streamline the workflow between **Editors** and **YouTubers**.  
+Editors can upload videos, and YouTubers can review, approve, or reject them. Once approved, the server uploads the video directly to the YouTuber’s YouTube channel using Google OAuth2.0.  
 
-## Using this example
+---
 
-Run the following command:
+## ❓ Why this project?
 
-```sh
-npx create-turbo@latest
-```
+Managing collaboration between video editors and YouTubers is often messy and time-consuming:  
+- Editors share video files via drives, emails, or links → prone to errors, version conflicts, and delays.  
+- YouTubers must manually download, review, and upload videos to YouTube → repetitive and inefficient.  
+- There’s no single **workflow system** that handles editing, approval, and publishing seamlessly.  
 
-## What's inside?
+This platform solves these problems by:  
+- Providing a **centralized workflow** where editors upload and YouTubers approve in one place.  
+- Enforcing **clear roles** (Editor uploads, YouTuber approves/publishes).  
+- Automating the **publishing process** directly to YouTube once a video is approved.  
+- Improving **collaboration, transparency, and productivity** in the content creation pipeline.  
 
-This Turborepo includes the following packages/apps:
+---
 
-### Apps and Packages
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+## 🚀 Features (Work in Progress)
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+- **Authentication**
+  - Email/Password (JWT-based)
+  - Google OAuth2.0 (for YouTubers, with YouTube upload scope)
 
-### Utilities
+- **Roles**
+  - **Editor** → Uploads videos (metadata + file path/S3 key)
+  - **YouTuber** → Reviews videos (Approve/Reject)
 
-This Turborepo has some additional tools already setup for you:
+- **Video Lifecycle**
+  - `PENDING` → Uploaded by Editor  
+  - `APPROVED` → Approved by YouTuber  
+  - `PUBLISHED` → Uploaded to YouTube automatically  
+  - `REJECTED` → Sent back for rework  
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+- **Secure Role-Based Access**
+  - Middleware to protect routes and enforce role checks  
 
-### Build
+---
 
-To build all apps and packages, run the following command:
+## 🛠️ Tech Stack
 
-```
-cd my-turborepo
+- **Backend**: Node.js, Express, TypeScript  
+- **Database**: PostgreSQL + Prisma ORM  
+- **Auth**: JWT + Google OAuth2.0  
+- **Cloud Storage**: (Planned) AWS S3 for video storage  
+- **Video Upload**: YouTube Data API (via OAuth tokens)  
 
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build
+---
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build
-yarn dlx turbo build
-pnpm exec turbo build
-```
+## 📌 Current Progress
 
-You can build a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+- ✅ User signup/signin with JWT  
+- ✅ Google OAuth2.0 integration for YouTubers  
+- ✅ Role-based middleware (Editor / YouTuber)  
+- ✅ Video upload route (Editor → DB)  
+- ⏳ Approve/Reject routes for YouTubers  
+- ⏳ YouTube video publishing integration  
+- ⏳ Frontend UI  
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build --filter=docs
+⚠️ **Development in progress** – This is an active WIP project. Expect frequent updates and changes.  
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build --filter=docs
-yarn exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
-```
+---
 
-### Develop
+## 🚧 Setup (For Developers)
 
-To develop all apps and packages, run the following command:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev
-yarn exec turbo dev
-pnpm exec turbo dev
-```
-
-You can develop a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
-
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev --filter=web
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev --filter=web
-yarn exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
-```
-
-### Remote Caching
-
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
-
-Turborepo can use a technique known as [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo login
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo login
-yarn exec turbo login
-pnpm exec turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo link
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo link
-yarn exec turbo link
-pnpm exec turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turborepo.com/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.com/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.com/docs/reference/configuration)
-- [CLI Usage](https://turborepo.com/docs/reference/command-line-reference)
-# YouBridge
+1. Clone the repo:
+   ```bash
+   git clone https://github.com/your-username/editor-youtuber-platform.git
+   cd editor-youtuber-platform
