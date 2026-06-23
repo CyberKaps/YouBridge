@@ -26,6 +26,10 @@ coverage
 out/
 build
 dist
+*.tsbuildinfo
+
+# Uploaded media
+uploads/
 
 
 # Debug

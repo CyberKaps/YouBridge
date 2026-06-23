@@ -8,6 +8,7 @@ export default function EditorDashboard() {
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
   const [videos, setVideos] = useState<any[]>([]);
+  const [youtubers, setYoutubers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Form states
@@ -34,6 +35,7 @@ export default function EditorDashboard() {
 
     setUser(parsedUser);
     fetchVideos(token);
+    fetchYoutubers(token);
   }, [router]);
 
   const fetchVideos = async (token: string) => {
@@ -51,6 +53,22 @@ export default function EditorDashboard() {
       console.error(err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchYoutubers = async (token: string) => {
+    try {
+      const res = await fetch("http://localhost:4000/api/v1/youtubers", {
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setYoutubers(data);
+      }
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -133,14 +151,21 @@ export default function EditorDashboard() {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
-            <input 
-              type="text" 
-              placeholder="YouTuber ID (Target)" 
+            <select
               className="input-field"
               value={youtuberId}
               onChange={(e) => setYoutuberId(e.target.value)}
               required
-            />
+            >
+              <option value="" disabled>
+                {youtubers.length === 0 ? "No YouTubers available" : "Select a YouTuber"}
+              </option>
+              {youtubers.map((yt) => (
+                <option key={yt.id} value={yt.id}>
+                  {yt.email}
+                </option>
+              ))}
+            </select>
             <div style={{ border: '2px dashed var(--border-color)', borderRadius: 'var(--radius-md)', padding: '2rem', textAlign: 'center', transition: 'var(--transition-fast)' }}>
               <input 
                 type="file" 

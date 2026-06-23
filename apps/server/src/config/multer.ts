@@ -15,7 +15,22 @@ const storage = multer.diskStorage({
   },
 });
 
+// Reject anything that isn't a video file
+const fileFilter: multer.Options["fileFilter"] = (req, file, cb) => {
+  if (file.mimetype.startsWith("video/")) {
+    cb(null, true);
+  } else {
+    cb(new Error("Only video files are allowed"));
+  }
+};
+
 // Create the multer instance with our storage configuration
-const upload = multer({ storage: storage });
+const upload = multer({
+  storage: storage,
+  fileFilter: fileFilter,
+  limits: {
+    fileSize: 2 * 1024 * 1024 * 1024, // 2 GB max per upload
+  },
+});
 
 export default upload;

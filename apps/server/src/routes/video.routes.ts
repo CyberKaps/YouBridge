@@ -14,15 +14,14 @@ interface MulterRequest extends Request {
 export const videoRouter: Router = express.Router();
 
 videoRouter.post('/uploads',
-    upload.single('videoFile'), 
-    authMiddleware, 
-    authorize(['EDITOR']), 
+    authMiddleware,
+    authorize(['EDITOR']),
+    upload.single('videoFile'),
     async (req: MulterRequest, res) => {
     try {
 
-        const { title, description, authorId, youtuberId } = req.body;
+        const { title, description, youtuberId } = req.body;
         const filePath = req.file?.path;
-        const userId = req.userId;
 
         if (!req.file || !title) {
             return res.status(400).json({ message: 'Video file and title are required.' });
@@ -30,6 +29,18 @@ videoRouter.post('/uploads',
 
         if (!req.user?.userId) {
             return res.status(400).json({ message: "userId is required"});
+        }
+
+        if (!youtuberId) {
+            return res.status(400).json({ message: "youtuberId is required" });
+        }
+
+        const youtuber = await prismaClient.user.findUnique({
+            where: { id: youtuberId }
+        });
+
+        if (!youtuber || youtuber.role !== 'YOUTUBER') {
+            return res.status(400).json({ message: "Invalid youtuberId: target YouTuber not found" });
         }
 
         const newVideo = await prismaClient.video.create({
@@ -53,6 +64,21 @@ videoRouter.post('/uploads',
 });
 
 import { uploadToYouTube } from "../services/youtube.service.js";
+
+// GET /youtubers - list selectable YouTubers for the editor's upload form
+videoRouter.get('/youtubers', authMiddleware, authorize(['EDITOR']), async (req: MulterRequest, res) => {
+    try {
+        const youtubers = await prismaClient.user.findMany({
+            where: { role: 'YOUTUBER' },
+            select: { id: true, email: true },
+            orderBy: { email: 'asc' }
+        });
+        res.json(youtubers);
+    } catch (error) {
+        console.error("Fetch YouTubers Error:", error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
 
 // GET /youtuber
 videoRouter.get('/youtuber', authMiddleware, authorize(['YOUTUBER']), async (req: MulterRequest, res) => {

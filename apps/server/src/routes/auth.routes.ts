@@ -110,9 +110,9 @@ authRouter.post('/signin', async (req,res) => {
 
 // Oauth2.0 routes
 
-console.log("CLIENT_ID from .env:", process.env.GOOGLE_CLIENT_ID);
-
-const oauth2Client = new OAuth2Client({
+// Build a fresh OAuth client per request so concurrent logins don't share
+// (and overwrite) each other's credentials on a single mutable instance.
+const createOAuthClient = () => new OAuth2Client({
     clientId: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     redirectUri: "http://localhost:4000/api/v1/google/callback"
@@ -120,6 +120,12 @@ const oauth2Client = new OAuth2Client({
 
 // Google callback
 authRouter.get("/google", (req, res) => {
+    if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
+        return res.status(500).json({
+            error: "Google OAuth is not configured. Set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in apps/server/.env"
+        });
+    }
+    const oauth2Client = createOAuthClient();
     const url = oauth2Client.generateAuthUrl({
         access_type: "offline", //ensure refresh token
         prompt: "consent",
@@ -142,6 +148,7 @@ authRouter.get("/google/callback", async (req, res) => {
             return res.status(400).json({ error: "Authorization code missing" });
         }
 
+        const oauth2Client = createOAuthClient();
         const {tokens} = await oauth2Client.getToken(code);
         oauth2Client.setCredentials(tokens);
 
