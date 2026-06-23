@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Upload, LogOut, FileVideo, Clock, CheckCircle, XCircle, PlayCircle } from "lucide-react";
+import { Upload, FileVideo, Clock, CheckCircle, XCircle, PlayCircle } from "lucide-react";
 
 export default function EditorDashboard() {
   const router = useRouter();
@@ -110,29 +110,19 @@ export default function EditorDashboard() {
     }
   };
 
-  const handleLogout = () => {
-    localStorage.clear();
-    router.push("/");
-  };
-
   if (loading) return <div className="mt-8 text-center">Loading...</div>;
 
   return (
-    <div className="w-full mt-8 animate-fade-in">
-      <div className="flex justify-between items-center mb-8">
-        <div>
-          <h1 style={{ fontSize: '2rem' }}>Editor Dashboard</h1>
-          <p style={{ color: 'var(--text-secondary)' }}>Welcome, {user?.email}</p>
-        </div>
-        <button onClick={handleLogout} className="btn btn-secondary">
-          <LogOut size={18} /> Logout
-        </button>
+    <div className="w-full animate-fade-in">
+      <div className="mb-8">
+        <h1 className="page-title">Editor Dashboard</h1>
+        <p className="page-subtitle">Welcome, {user?.email}</p>
       </div>
 
-      <div className="flex gap-8" style={{ alignItems: 'flex-start' }}>
+      <div className="dashboard-grid">
         {/* Upload Form */}
-        <div className="glass-panel p-6" style={{ flex: '1' }}>
-          <h2 style={{ fontSize: '1.25rem', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+        <div className="card p-6">
+          <h2 className="section-title">
             <Upload size={20} color="var(--accent-primary)" /> Upload New Video
           </h2>
           <form onSubmit={handleUpload} className="flex flex-col gap-4">
@@ -189,16 +179,17 @@ export default function EditorDashboard() {
         </div>
 
         {/* Video List */}
-        <div style={{ flex: '1.5' }}>
-          <h2 style={{ fontSize: '1.25rem', marginBottom: '1.5rem' }}>Your Videos</h2>
+        <div>
+          <h2 className="section-title">Your Videos</h2>
           {videos.length === 0 ? (
-            <div className="glass-panel p-8 text-center" style={{ color: 'var(--text-secondary)' }}>
-              No videos uploaded yet.
+            <div className="empty-state">
+              <FileVideo size={36} color="var(--text-secondary)" style={{ marginBottom: '0.75rem' }} />
+              <p>No videos uploaded yet. Upload your first one to get started.</p>
             </div>
           ) : (
             <div className="flex flex-col gap-4">
               {videos.map(video => (
-                <div key={video.id} className="glass-panel p-4 flex justify-between items-center" style={{ transition: 'var(--transition-fast)' }}>
+                <div key={video.id} className="card card-hover p-4 flex justify-between items-center">
                   <div>
                     <h3 style={{ fontSize: '1.1rem', fontWeight: 600 }}>{video.title}</h3>
                     <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>

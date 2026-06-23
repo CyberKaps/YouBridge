@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import React from "react";
+import Navbar from "./components/Navbar";
 
 export const metadata: Metadata = {
-  title: "YouBridge - Editor/YouTuber Collaboration",
-  description: "Seamlessly connect Editors and YouTubers.",
+  title: "YouBridge — Editor / YouTuber Collaboration",
+  description: "Upload, review, and publish to YouTube seamlessly. The collaboration bridge between editors and creators.",
 };
 
 export default function RootLayout({
@@ -15,9 +16,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <main className="container flex flex-col items-center justify-center">
-          {children}
-        </main>
+        <div className="app-shell">
+          <Navbar />
+          <main className="container app-content">{children}</main>
+        </div>
       </body>
     </html>
   );

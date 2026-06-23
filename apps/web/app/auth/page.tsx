@@ -58,12 +58,15 @@ function AuthContent() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[80vh] w-full max-w-md mx-auto mt-8 animate-fade-in">
+    <div className="flex flex-col items-center w-full animate-fade-in" style={{ maxWidth: '440px', margin: '3rem auto 0' }}>
       <div className="glass-panel w-full p-8">
-        <h2 className="text-center" style={{ fontSize: '2rem', marginBottom: '2rem' }}>
-          {isLogin ? "Welcome Back" : "Create Account"}
+        <h2 className="text-center" style={{ fontSize: '1.75rem', marginBottom: '0.5rem' }}>
+          {isLogin ? "Welcome back" : "Create your account"}
         </h2>
-        
+        <p className="text-center" style={{ color: 'var(--text-secondary)', marginBottom: '2rem', fontSize: '0.95rem' }}>
+          {isLogin ? "Sign in to continue to YouBridge" : "Join YouBridge to start collaborating"}
+        </p>
+
         {error && (
           <div style={{ color: 'var(--status-rejected)', background: 'rgba(239,68,68,0.1)', padding: '1rem', borderRadius: 'var(--radius-sm)', marginBottom: '1rem' }}>
             {error}
