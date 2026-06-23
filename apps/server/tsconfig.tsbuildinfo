@@ -1,1 +1,1 @@
-{"root":["./src/index.ts","./src/config/google.ts","./src/config/multer.ts","./src/middleware/authMiddleware.ts","./src/middleware/roleMiddleware.ts","./src/routes/auth.routes.ts","./src/routes/test.routes.ts","./src/routes/video.routes.ts"],"version":"5.9.2"}
+{"root":["./src/index.ts","./src/config/google.ts","./src/config/multer.ts","./src/middleware/authmiddleware.ts","./src/middleware/rolemiddleware.ts","./src/routes/auth.routes.ts","./src/routes/test.routes.ts","./src/routes/video.routes.ts","./src/services/youtube.service.ts"],"version":"5.9.2"}
